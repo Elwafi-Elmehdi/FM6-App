@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import java.util.Date;
 
 @Entity
 public class Adherent {
@@ -30,8 +31,9 @@ public class Adherent {
 
     @Max(value = 130,message = "L'age est non valid")
     @Min(value = 18,message = "L'age est non valid")
-    @NotBlank(message = "Le nom est obligatoire")
+    @NotBlank(message = "L'age est obligatoire")
     private Integer age;
+    private Date Naissance;
 
     public Adherent() {
     }
