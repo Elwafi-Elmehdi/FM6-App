@@ -1,5 +1,6 @@
 package com.example.fm6app.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sun.istack.NotNull;
 import org.springframework.context.annotation.Bean;
 
@@ -17,111 +18,93 @@ public class Critere {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @JsonFormat(pattern = "dd-MM-yyyy@HH:mm:ss",locale = "fr_MA")
     private Date createdAt;
+    @JsonFormat(pattern = "dd-MM-yyyy@HH:mm:ss",locale = "fr_MA")
     private Date updatedAt;
 
     @NotNull
-    @NotBlank
     @Min(value = 0)
     private int valeurChaqueEnfant;
 
     @NotNull
-    @NotBlank
     @Min(value = 0)
     private int anciennete;
 
     @NotNull
-    @NotBlank
     @Min(value = 0)
     private int age;
 
     // Environnement
     @NotNull
-    @NotBlank
     @Min(value = 0)
     private int environnementRural;
 
     @NotNull
-    @NotBlank
     @Min(value = 0)
     private int environnementCivil;
 
     // Incapable
     @NotNull
-    @NotBlank
     @Min(value = 0)
     private int etatPhysique;
 
     //Situation Familiale
     @NotNull
-    @NotBlank
     @Min(value = 0)
     private int sfCelibataire;
 
     @NotNull
-    @NotBlank
     @Min(value = 0)
     private int sfVeuf;
 
     @NotNull
-    @NotBlank
     @Min(value = 0)
     private int sfMarie;
 
     @NotNull
-    @NotBlank
     @Min(value = 0)
     private int sfDivorce;
 
     //Logement
     @NotNull
-    @NotBlank
     @Min(value = 0)
     private int logementLouer;
 
     @NotNull
-    @NotBlank
     @Min(value = 0)
     private int logementAnnexeMosque;
 
     @NotNull
-    @NotBlank
     @Min(value = 0)
     private int logementFamille;
 
     //Fonction
     @NotNull
-    @NotBlank
     @Min(value = 0)
     private int fonctionImame;
 
     @NotNull
-    @NotBlank
     @Min(value = 0)
     private int fonctionKhatib;
 
     @NotNull
-    @NotBlank
     @Min(value = 0)
     private int fonctionMoadin;
 
     @NotNull
-    @NotBlank
     @Min(value = 0)
     private int fonctionGardien;
 
     @NotNull
-    @NotBlank
     @Min(value = 0)
     private int fonctionMenage;
 
     @NotNull
-    @NotBlank
     @Min(value = 0)
     private int fonctionObservateur;
 
     @NotNull
-    @NotBlank
     @Min(value = 0)
     private int guideEncadrentPrecheur;
 
@@ -130,7 +113,6 @@ public class Critere {
 
         this.valeurChaqueEnfant = 15;
         this.etatPhysique = 140;
-
         this.anciennete = 1;
         this.age = 1;
 

@@ -8,5 +8,5 @@ public interface CritereService {
     List<Critere> findAll();
     Critere getCritere();
     Critere saveCritere();
-    Critere updateCritereById(long id,Critere critere);
+    Critere updateCritereById(Critere critere);
 }

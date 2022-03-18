@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CritereServiceImplm implements CritereService {
@@ -40,9 +41,10 @@ public class CritereServiceImplm implements CritereService {
     }
 
     @Override
-    public Critere updateCritereById(long id,Critere critere) {
-        Critere critere1 = critereRepository.findById(id);
-        if (critere == critere1){
+    public Critere updateCritereById(Critere critere) {
+        Optional<Critere> optionalCritere = critereRepository.findById(critere.getId());
+        Critere critere1 = optionalCritere.get();
+        if (critere.equals(critere1)){
             critere1.setUpdatedAt(new Date());
 
             critere1.setAge(critere.getAge());
