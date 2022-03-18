@@ -1,53 +1,133 @@
 package com.example.fm6app.domain;
 
+import com.sun.istack.NotNull;
 import org.springframework.context.annotation.Bean;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 public class Critere {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Date createdAt;
     private Date updatedAt;
 
+    @NotNull
+    @NotBlank
+    @Min(value = 0)
     private int valeurChaqueEnfant;
+
+    @NotNull
+    @NotBlank
+    @Min(value = 0)
     private int anciennete;
+
+    @NotNull
+    @NotBlank
+    @Min(value = 0)
     private int age;
 
     // Environnement
+    @NotNull
+    @NotBlank
+    @Min(value = 0)
     private int environnementRural;
+
+    @NotNull
+    @NotBlank
+    @Min(value = 0)
     private int environnementCivil;
 
     // Incapable
+    @NotNull
+    @NotBlank
+    @Min(value = 0)
     private int etatPhysique;
 
     //Situation Familiale
+    @NotNull
+    @NotBlank
+    @Min(value = 0)
     private int sfCelibataire;
+
+    @NotNull
+    @NotBlank
+    @Min(value = 0)
     private int sfVeuf;
+
+    @NotNull
+    @NotBlank
+    @Min(value = 0)
     private int sfMarie;
+
+    @NotNull
+    @NotBlank
+    @Min(value = 0)
     private int sfDivorce;
 
     //Logement
+    @NotNull
+    @NotBlank
+    @Min(value = 0)
     private int logementLouer;
+
+    @NotNull
+    @NotBlank
+    @Min(value = 0)
     private int logementAnnexeMosque;
+
+    @NotNull
+    @NotBlank
+    @Min(value = 0)
     private int logementFamille;
 
     //Fonction
+    @NotNull
+    @NotBlank
+    @Min(value = 0)
     private int fonctionImame;
+
+    @NotNull
+    @NotBlank
+    @Min(value = 0)
     private int fonctionKhatib;
+
+    @NotNull
+    @NotBlank
+    @Min(value = 0)
     private int fonctionMoadin;
+
+    @NotNull
+    @NotBlank
+    @Min(value = 0)
     private int fonctionGardien;
+
+    @NotNull
+    @NotBlank
+    @Min(value = 0)
     private int fonctionMenage;
+
+    @NotNull
+    @NotBlank
+    @Min(value = 0)
     private int fonctionObservateur;
+
+    @NotNull
+    @NotBlank
+    @Min(value = 0)
     private int guideEncadrentPrecheur;
 
     public Critere() {
+        this.createdAt = new Date();
+
         this.valeurChaqueEnfant = 15;
         this.etatPhysique = 140;
 
@@ -257,5 +337,13 @@ public class Critere {
 
     public void setGuideEncadrentPrecheur(int guideEncadrentPrecheur) {
         this.guideEncadrentPrecheur = guideEncadrentPrecheur;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Critere critere = (Critere) o;
+        return id.equals(critere.id);
     }
 }
