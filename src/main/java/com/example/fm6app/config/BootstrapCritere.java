@@ -1,6 +1,5 @@
 package com.example.fm6app.config;
 
-import com.example.fm6app.domain.Critere;
 import com.example.fm6app.service.facade.CritereService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

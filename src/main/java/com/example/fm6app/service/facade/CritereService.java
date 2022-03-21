@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface CritereService {
     List<Critere> findAll();
-    Critere getCritere();
     Critere saveCritere();
     Critere updateCritereById(Critere critere);
 }
