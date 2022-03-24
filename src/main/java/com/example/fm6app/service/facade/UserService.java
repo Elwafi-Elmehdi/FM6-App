@@ -2,10 +2,11 @@ package com.example.fm6app.service.facade;
 
 import com.example.fm6app.domain.UserAdherent;
 import org.apache.catalina.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
     List<UserAdherent> findAll();
 
     UserAdherent findByUsername(String username);
