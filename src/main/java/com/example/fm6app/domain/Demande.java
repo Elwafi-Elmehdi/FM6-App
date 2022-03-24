@@ -27,7 +27,7 @@ public class Demande {
     private String adresseActualle;
     private String mosque;
     private String mosqueRef;
-
+    private Date dateJoindreMosque;
     private long anciennete;
 
     private int score;
@@ -39,6 +39,14 @@ public class Demande {
         super();
         this.score = 0;
         this.createdAt = new Date();
+    }
+
+    public Date getDateJoindreMosque() {
+        return dateJoindreMosque;
+    }
+
+    public void setDateJoindreMosque(Date dateJoindreMosque) {
+        this.dateJoindreMosque = dateJoindreMosque;
     }
 
     public String getReference() {
