@@ -6,6 +6,6 @@ public enum Fonction {
     MOADIN,
     GARDIEN,
     MENAGE,
-    OBSERVATEUR,
+
     PRECHEUR
 }

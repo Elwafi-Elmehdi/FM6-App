@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface DemandeService {
     List<Demande> findAll();
-    List<Demande> findByCin(String cin);
+    Demande findByCin(String cin);
     Demande save(Demande demande);
     Demande delete(Demande demande);
 }

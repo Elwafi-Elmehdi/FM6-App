@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface DemandeRepository extends JpaRepository<Demande,Long> {
-    List<Demande> findByCin(String cin);
+    Demande findByCin(String cin);
 
 }
