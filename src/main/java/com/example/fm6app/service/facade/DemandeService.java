@@ -9,4 +9,5 @@ public interface DemandeService {
     Demande findByCin(String cin);
     Demande save(Demande demande);
     Demande delete(Demande demande);
+    Demande update(Demande demande);
 }

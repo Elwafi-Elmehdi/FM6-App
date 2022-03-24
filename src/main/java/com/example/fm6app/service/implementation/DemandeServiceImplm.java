@@ -13,6 +13,8 @@ import org.springframework.http.server.DelegatingServerHttpResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class DemandeServiceImplm implements DemandeService {
 
@@ -53,8 +55,20 @@ public class DemandeServiceImplm implements DemandeService {
         if(demandeRepo.findById(demande.getId()).get() == null)
             return null;
         else{
-        demandeRepo.deleteById(demande.getId());
+            demandeRepo.deleteById(demande.getId());
             return demande;
+        }
+    }
+
+    @Override
+    public Demande update(Demande demande) {
+        Optional<Demande> dbDemande = demandeRepo.findById(demande.getId());
+        if(dbDemande.isEmpty()){
+            return null;
+        }else if (!dbDemande.get().getCin().equalsIgnoreCase(demande.getCin()))
+            return  null;
+        else{
+            return demandeRepo.save(demande);
         }
     }
 

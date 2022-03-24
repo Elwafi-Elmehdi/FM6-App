@@ -34,4 +34,8 @@ public class DemandeController {
     public Demande delete(@RequestBody Demande demande) {
         return demandeService.delete(demande);
     }
+    @PutMapping("/")
+    public Demande update(@RequestBody Demande demande) {
+        return demandeService.update(demande);
+    }
 }
