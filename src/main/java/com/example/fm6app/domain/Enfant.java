@@ -15,7 +15,7 @@ public class Enfant {
     public void setNaissance(Date naissance) {
         this.naissance = naissance;
         long diff = (new Date().getTime() - naissance.getTime());
-        this.age = ( diff / (1000l*60*60*24*365));
+        this.age = ( diff / (1000L *60*60*24*365));
     }
 
     public long getAge() {

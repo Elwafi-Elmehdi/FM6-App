@@ -47,6 +47,8 @@ public class Demande {
 
     public void setDateJoindreMosque(Date dateJoindreMosque) {
         this.dateJoindreMosque = dateJoindreMosque;
+        long diff = (new Date().getTime() - dateJoindreMosque.getTime());
+        this.anciennete = ( diff / (1000L *60*60*24*365));
     }
 
     public String getReference() {
@@ -131,14 +133,12 @@ public class Demande {
 
     public void setNaissance(Date naissance) {
         this.naissance = naissance;
+        long diff = (new Date().getTime() - naissance.getTime());
+        this.age = ( diff / (1000L *60*60*24*365));
     }
 
     public long getAge() {
         return age;
-    }
-
-    public void setAge(long age) {
-        this.age = age;
     }
 
     public String getTelephone() {
@@ -177,9 +177,6 @@ public class Demande {
         return anciennete;
     }
 
-    public void setAnciennete(long anciennete) {
-        this.anciennete = anciennete;
-    }
 
     public int getScore() {
         return score;
