@@ -11,18 +11,23 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false,updatable = false)
-    private Long id;
-    private String userId;
-    private String firstName;
-    private String lastName;
-    private String username;
     @JsonView(BodyView.BasicUser.class)
+    private Long id;
+    @JsonView(BodyView.BasicUser.class)
+    private String userId;
+    @JsonView(BodyView.BasicUser.class)
+    private String firstName;
+    @JsonView(BodyView.BasicUser.class)
+    private String lastName;
+    @JsonView(BodyView.BasicUser.class)
+    private String username;
     private String password;
+    @JsonView(BodyView.BasicUser.class)
     private String email;
-    private String profileImgURL;
     private Date lastLoginDate;
     private Date lastLoginDateDisplay;
     private Date joinDate;
+    @JsonView(BodyView.BasicUser.class)
     private String role;
     private String[] authorities;
     private boolean isActive;
@@ -87,13 +92,7 @@ public class User {
         this.email = email;
     }
 
-    public String getProfileImgURL() {
-        return profileImgURL;
-    }
 
-    public void setProfileImgURL(String profileImgURL) {
-        this.profileImgURL = profileImgURL;
-    }
 
     public Date getLastLoginDate() {
         return lastLoginDate;
