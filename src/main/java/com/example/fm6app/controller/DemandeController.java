@@ -1,6 +1,7 @@
 package com.example.fm6app.controller;
 
 import com.example.fm6app.domain.Demande;
+import com.example.fm6app.exception.ExceptionHandling;
 import com.example.fm6app.service.facade.DemandeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/demandes")
-public class DemandeController {
+public class DemandeController extends ExceptionHandling {
 
     private DemandeService demandeService;
 

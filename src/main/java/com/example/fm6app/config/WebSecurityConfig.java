@@ -5,18 +5,27 @@ import com.example.fm6app.service.facade.UserService;
 import com.example.fm6app.service.implementation.UserServiceImplm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@ComponentScan
+@EnableGlobalMethodSecurity(
+        prePostEnabled = true,
+        securedEnabled = true,
+        jsr250Enabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JWTAuthorizationFilter jwtAuthorizationFilter;
@@ -25,9 +34,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JWTAccessDenielHandler jwtAccessDenielHandler;
     @Autowired
-    private UserServiceImplm userServiceImp;
+    private UserService userService;
     @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
+    private PasswordEncoder passwordEncoder;
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -38,26 +49,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(SecurityConsts.PUBLIC_URLS).permitAll()
-                .anyRequest().authenticated()
                 .antMatchers("/demandes/**","/criteres/**").hasAuthority("ROLE_ADMIN")
                 .antMatchers("/demandes/**").hasAuthority("ROLE_USER")
+                .anyRequest().authenticated()
+
                 .and()
                 .exceptionHandling().accessDeniedHandler(jwtAccessDenielHandler)
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .and().addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
+                .and()
+                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
     }
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userServiceImp).passwordEncoder(bCryptPasswordEncoder);
+        auth.userDetailsService(userService).passwordEncoder(passwordEncoder);
     }
 
-    @Bean
+    @Bean(name = "authenticationManager")
     @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception{
+    public  AuthenticationManager authenticationManagerBean() throws Exception{
         return super.authenticationManagerBean();
     }
-    @Bean
-    BCryptPasswordEncoder getbCryptPasswordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
+
+
 }
