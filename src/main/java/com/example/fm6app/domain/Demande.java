@@ -13,11 +13,15 @@ public class Demande {
 
     private final Date createdAt;
     private String reference;
+
     private Environnement environment;
     private SituationFamiliale sf;
     private Fonction fonction;
     private Logement logement;
     private ConditionPhysique conditionPhysique;
+
+    private String nom;
+    private String prenom;
 
     private String cin;
     private String AdherentCode;
@@ -49,6 +53,22 @@ public class Demande {
         this.dateJoindreMosque = dateJoindreMosque;
         long diff = (new Date().getTime() - dateJoindreMosque.getTime());
         this.anciennete = ( diff / (1000L *60*60*24*365));
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
     }
 
     public String getReference() {

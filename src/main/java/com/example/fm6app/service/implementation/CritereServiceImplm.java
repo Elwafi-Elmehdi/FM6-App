@@ -26,6 +26,11 @@ public class CritereServiceImplm implements CritereService {
     }
 
     @Override
+    public Critere findOne() {
+        return findAll().get(0);
+    }
+
+    @Override
     public Critere saveCritere() {
         if (isCritereEmpty()){
             Critere critere1 = new Critere();

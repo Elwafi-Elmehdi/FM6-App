@@ -10,18 +10,18 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@Configuration
-@EnableSwagger2
+//@Configuration
+//@EnableSwagger2
 public class SwaggerConfig {
 
-    @Bean
-    public Docket Api() {
-        return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any()).build().apiInfo(getApiInfo());
-    }
-
-    public ApiInfo getApiInfo() {
-        return new ApiInfoBuilder().title("fm6-app").version("2.0").description("Application qui a classifier des demandes")
-                .license("he").build();
-    }
+//    @Bean
+//    public Docket Api() {
+//        return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any())
+//                .paths(PathSelectors.any()).build().apiInfo(getApiInfo());
+//    }
+//
+//    public ApiInfo getApiInfo() {
+//        return new ApiInfoBuilder().title("fm6-app").version("2.0").description("Application qui a classifier des demandes")
+//                .license("he").build();
+//    }
 }

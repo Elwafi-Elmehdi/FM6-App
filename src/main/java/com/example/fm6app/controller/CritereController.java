@@ -15,6 +15,7 @@ public class CritereController {
     public CritereController(CritereService critereService) {
         this.critereService = critereService;
     }
+
     @GetMapping("/")
     public List<Critere> findAll() {
         return critereService.findAll();
@@ -22,5 +23,10 @@ public class CritereController {
     @PutMapping("/")
     public Critere updateCritereById(@RequestBody Critere critere) {
         return critereService.updateCritereById(critere);
+    }
+
+    @GetMapping("/global")
+    public Critere findOne() {
+        return critereService.findOne();
     }
 }

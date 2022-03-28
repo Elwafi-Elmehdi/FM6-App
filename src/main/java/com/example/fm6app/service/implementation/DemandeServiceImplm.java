@@ -8,8 +8,6 @@ import com.example.fm6app.service.facade.CritereService;
 import com.example.fm6app.service.facade.DemandeService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
-import org.springframework.http.server.DelegatingServerHttpResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,7 +39,7 @@ public class DemandeServiceImplm implements DemandeService {
 
     @Override
     public Demande save(Demande demande) {
-        if(demandeRepo.findById(demande.getId()).get() != null || demandeRepo.findByCin(demande.getCin()) != null)
+        if(demandeRepo.findByCin(demande.getCin()) != null)
             return null;
         else{
             demande = generateDemande(demande);
@@ -89,6 +87,8 @@ public class DemandeServiceImplm implements DemandeService {
         Demande demandeDao = new Demande();
         demandeDao.setReference(demande.getCin()+ RandomStringUtils.randomAlphanumeric(5));
         demandeDao.setNaissance(demande.getNaissance());
+        demandeDao.setNom(demande.getNom());
+        demandeDao.setPrenom(demande.getPrenom());
         demandeDao.setCin(demande.getCin());
         demandeDao.setAdherentCode(demande.getAdherentCode());
         demandeDao.setTelephone(demande.getTelephone());
@@ -96,6 +96,13 @@ public class DemandeServiceImplm implements DemandeService {
         demandeDao.setMosque(demande.getMosque());
         demandeDao.setMosqueRef(demande.getMosqueRef());
         demandeDao.setDateJoindreMosque(demande.getDateJoindreMosque());
+
+        demandeDao.setEnvironment(demande.getEnvironment());
+        demandeDao.setSf(demande.getSf());
+        demandeDao.setFonction(demande.getFonction());
+        demandeDao.setConditionPhysique(demande.getConditionPhysique());
+        demandeDao.setLogement(demande.getLogement());
+
         return demandeDao;
     }
 
