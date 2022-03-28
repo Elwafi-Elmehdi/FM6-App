@@ -1,5 +1,8 @@
 package com.example.fm6app.domain;
 
+import com.example.fm6app.common.BodyView;
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -13,6 +16,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String username;
+    @JsonView(BodyView.BasicUser.class)
     private String password;
     private String email;
     private String profileImgURL;
