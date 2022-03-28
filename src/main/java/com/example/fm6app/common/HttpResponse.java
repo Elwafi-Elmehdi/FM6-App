@@ -1,5 +1,6 @@
 package com.example.fm6app.common;
 
+import com.example.fm6app.common.security.SecurityConsts;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.http.HttpStatus;
 
