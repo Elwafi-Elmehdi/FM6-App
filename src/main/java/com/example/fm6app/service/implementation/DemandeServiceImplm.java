@@ -3,6 +3,7 @@ package com.example.fm6app.service.implementation;
 import com.example.fm6app.domain.Critere;
 import com.example.fm6app.domain.Demande;
 import com.example.fm6app.domain.Enfant;
+import com.example.fm6app.domain.Fonction;
 import com.example.fm6app.repository.DemandeRepository;
 import com.example.fm6app.service.facade.CritereService;
 import com.example.fm6app.service.facade.DemandeService;
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +40,26 @@ public class DemandeServiceImplm implements DemandeService {
     }
 
     @Override
+    public Demande findByCodeAdherentCode(String code) {
+        return demandeRepo.findByAdherentCode(code);
+    }
+
+    @Override
+    public Demande findByFonction(Fonction fonction) {
+        return demandeRepo.findByFonction(fonction);
+    }
+
+    @Override
+    public Demande findByAgeLessThanEqual(long age) {
+        return demandeRepo.findByAgeIsLessThanEqual(age);
+    }
+
+    @Override
+    public Demande findByAncienneteLessThanEqual(long anciennete) {
+        return demandeRepo.findByAncienneteIsLessThanEqual(anciennete);
+    }
+    @Transactional
+    @Override
     public Demande save(Demande demande) {
         if(demandeRepo.findByCin(demande.getCin()) != null)
             return null;
@@ -47,7 +69,7 @@ public class DemandeServiceImplm implements DemandeService {
             return demandeRepo.save(demande);
         }
     }
-
+    @Transactional
     @Override
     public Demande delete(Demande demande) {
         if(demandeRepo.findById(demande.getId()).get() == null)
@@ -57,7 +79,7 @@ public class DemandeServiceImplm implements DemandeService {
             return demande;
         }
     }
-
+    @Transactional
     @Override
     public Demande update(Demande demande) {
         Optional<Demande> dbDemande = demandeRepo.findById(demande.getId());

@@ -24,7 +24,7 @@ public class Demande {
     private String prenom;
 
     private String cin;
-    private String AdherentCode;
+    private String adherentCode;
     private Date naissance;
     private long age;
     private String telephone;
@@ -140,11 +140,11 @@ public class Demande {
     }
 
     public String getAdherentCode() {
-        return AdherentCode;
+        return adherentCode;
     }
 
     public void setAdherentCode(String adherentCode) {
-        AdherentCode = adherentCode;
+        adherentCode = adherentCode;
     }
 
     public Date getNaissance() {

@@ -49,10 +49,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(SecurityConsts.PUBLIC_URLS).permitAll()
-                .antMatchers("/demandes/**","/criteres/**").hasAuthority("ROLE_ADMIN")
-                .antMatchers("/demandes/**").hasAuthority("ROLE_USER")
+//                .antMatchers("/demandes/**","/criteres/**").hasAuthority("ADMIN")
+//                .antMatchers("/demandes/**").hasAuthority("USER")
                 .anyRequest().authenticated()
-
                 .and()
                 .exceptionHandling().accessDeniedHandler(jwtAccessDenielHandler)
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
