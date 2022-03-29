@@ -5,12 +5,15 @@ import com.example.fm6app.domain.Demande;
 import com.example.fm6app.domain.Enfant;
 import com.example.fm6app.domain.Fonction;
 import com.example.fm6app.repository.DemandeRepository;
+import com.example.fm6app.service.dto.DemandeDTO;
 import com.example.fm6app.service.facade.CritereService;
 import com.example.fm6app.service.facade.DemandeService;
+import com.example.fm6app.service.utils.StringUtil;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -21,13 +24,17 @@ public class DemandeServiceImplm implements DemandeService {
     private DemandeRepository demandeRepo;
     private CritereService critereService;
     private Critere critere;
+    private EntityManager entityManager;
 
-    @Autowired
-    public DemandeServiceImplm(DemandeRepository demandeRepo,CritereService critereService) {
+    public DemandeServiceImplm(DemandeRepository demandeRepo, CritereService critereService, EntityManager entityManager) {
         this.demandeRepo = demandeRepo;
         this.critereService = critereService;
-        this.critere = critereService.findAll().get(0);
+        this.critere = critereService.findOne();
+        this.entityManager = entityManager;
     }
+
+    @Autowired
+
 
     @Override
     public List<Demande> findAll() {
@@ -90,6 +97,18 @@ public class DemandeServiceImplm implements DemandeService {
         else{
             return demandeRepo.save(demande);
         }
+    }
+
+    @Override
+    public List<Demande> findByCriteria(DemandeDTO dto) {
+        String query = "SELECT o FROM Demande o where 1=1 ";
+        query += StringUtil.addConstraint( "o", "cin","=",dto.getCin());
+        query += StringUtil.addConstraint( "o", "telephone","LIKE",dto.getTelephone());
+        query += StringUtil.addConstraint( "o", "codeAdherent","LIKE", dto.getCodeAdherent());
+        query += StringUtil.addConstraint("o","age","<=",dto.getAge());
+        query += StringUtil.addConstraint("o","anciennete","<=",dto.getAnciennete());
+        query += StringUtil.addConstraint("o","fonction","=",dto.getFonction().ordinal());
+        return entityManager.createQuery(query).getResultList();
     }
 
     private int generateScore(Demande demande) {
