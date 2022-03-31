@@ -7,8 +7,12 @@ public class StringUtil {
     public static boolean isNotEmpty(String string) {
         return !isEmpty(string);
     }
+
     public static String addConstraint(String beanAbrev, String atributeName, String operator, Object value) {
         boolean condition = value != null;
+        if(value == null){
+            return "";
+        }
         if (value != null && value.getClass().getSimpleName().equals("String")) {
             condition = condition && !value.equals("");
         }
@@ -17,7 +21,6 @@ public class StringUtil {
         } else if (condition) {
             return " AND " + beanAbrev + "." + atributeName + " " + operator + " '" + value + "'";
         }
-
         return "";
     }
 }

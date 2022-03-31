@@ -3,7 +3,9 @@ package com.example.fm6app.service.facade;
 import com.example.fm6app.domain.Demande;
 import com.example.fm6app.domain.Fonction;
 import com.example.fm6app.service.dto.DemandeDTO;
+import org.springframework.http.ResponseEntity;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface DemandeService {
@@ -17,4 +19,5 @@ public interface DemandeService {
     Demande delete(Demande demande);
     Demande update(Demande demande);
     List<Demande> findByCriteria(DemandeDTO dto);
+    ResponseEntity<byte[]> generateXlsRepory(int year) throws IOException;
 }

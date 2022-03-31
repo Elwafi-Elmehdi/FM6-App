@@ -2,7 +2,10 @@ package com.example.fm6app.repository;
 
 import com.example.fm6app.domain.Demande;
 import com.example.fm6app.domain.Fonction;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,4 +17,7 @@ public interface DemandeRepository extends JpaRepository<Demande,Long> {
     Demande findByFonction(Fonction fonction);
     Demande findByAgeIsLessThanEqual(Long age);
     Demande findByAncienneteIsLessThanEqual(Long anciennete);
+
+    @Query(value = "SELECT * FROM demande  WHERE created_at LIKE %?1%",nativeQuery = true)
+    List<Demande> findByDateCustom(@Param("created_at") int year);
 }

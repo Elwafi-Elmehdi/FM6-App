@@ -10,11 +10,25 @@ import com.example.fm6app.service.facade.CritereService;
 import com.example.fm6app.service.facade.DemandeService;
 import com.example.fm6app.service.utils.StringUtil;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +40,7 @@ public class DemandeServiceImplm implements DemandeService {
     private Critere critere;
     private EntityManager entityManager;
 
+    @Autowired
     public DemandeServiceImplm(DemandeRepository demandeRepo, CritereService critereService, EntityManager entityManager) {
         this.demandeRepo = demandeRepo;
         this.critereService = critereService;
@@ -33,12 +48,11 @@ public class DemandeServiceImplm implements DemandeService {
         this.entityManager = entityManager;
     }
 
-    @Autowired
 
 
     @Override
     public List<Demande> findAll() {
-        return demandeRepo.findAll();
+        return demandeRepo.findAll(Sort.by("score").descending());
     }
 
     @Override
@@ -104,13 +118,109 @@ public class DemandeServiceImplm implements DemandeService {
         String query = "SELECT o FROM Demande o where 1=1 ";
         query += StringUtil.addConstraint( "o", "cin","=",dto.getCin());
         query += StringUtil.addConstraint( "o", "telephone","LIKE",dto.getTelephone());
-        query += StringUtil.addConstraint( "o", "codeAdherent","LIKE", dto.getCodeAdherent());
+        query += StringUtil.addConstraint( "o", "adherent_code","LIKE", dto.getCodeAdherent());
         query += StringUtil.addConstraint("o","age","<=",dto.getAge());
         query += StringUtil.addConstraint("o","anciennete","<=",dto.getAnciennete());
-        query += StringUtil.addConstraint("o","fonction","=",dto.getFonction().ordinal());
+        query += StringUtil.addConstraint("o","fonction","=",dto.getFonction() == null?null:dto.getFonction().ordinal());
         return entityManager.createQuery(query).getResultList();
+
     }
 
+    @Override
+    public ResponseEntity<byte[]> generateXlsRepory(int year) throws IOException {
+
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet("CLASSIFICATION");
+        setColumnsWidth(sheet);
+
+        int rownum = 0;
+        Cell cell;
+        Row row;
+        HSSFCellStyle style = createStyleForTitle(workbook);
+        row = sheet.createRow(rownum);
+        List<Demande> demandes = demandeRepo.findByDateCustom(year);
+
+        cell = row.createCell(0, CellType.STRING);
+        cell.setCellValue("Score");
+        cell.setCellStyle(style);
+
+        cell = row.createCell(1, CellType.STRING);
+        cell.setCellValue("CIN");
+        cell.setCellStyle(style);
+
+        cell = row.createCell(2, CellType.STRING);
+        cell.setCellValue("Adhérent Code");
+        cell.setCellStyle(style);
+
+        cell = row.createCell(3, CellType.STRING);
+        cell.setCellValue("Nom");
+        cell.setCellStyle(style);
+
+        cell = row.createCell(4, CellType.STRING);
+        cell.setCellValue("Prénom");
+        cell.setCellStyle(style);
+
+        cell = row.createCell(5, CellType.STRING);
+        cell.setCellValue("Téléphone");
+        cell.setCellStyle(style);
+
+        cell = row.createCell(6, CellType.STRING);
+        cell.setCellValue("Adresse actuelle");
+        cell.setCellStyle(style);
+
+        for (Demande demande : demandes){
+            rownum++;
+            row = sheet.createRow(rownum);
+
+            cell = row.createCell(0, CellType.STRING);
+            cell.setCellValue(demande.getScore());
+
+            cell = row.createCell(1, CellType.STRING);
+            cell.setCellValue(demande.getCin());
+
+            cell = row.createCell(2, CellType.STRING);
+            cell.setCellValue(demande.getAdherentCode());
+
+            cell = row.createCell(3, CellType.STRING);
+            cell.setCellValue(demande.getNom());
+
+            cell = row.createCell(4, CellType.STRING);
+            cell.setCellValue(demande.getPrenom());
+
+            cell = row.createCell(5, CellType.STRING);
+            cell.setCellValue(demande.getTelephone());
+
+            cell = row.createCell(6, CellType.STRING);
+            cell.setCellValue(demande.getAdresseActualle());
+        }
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        workbook.write(out);
+        out.close();
+        workbook.close();
+        return createResponseEntity(out.toByteArray(),"report.xls");
+    }
+    private ResponseEntity<byte[]>  createResponseEntity(byte[] report, String fileName){
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8"))
+                .contentLength(report.length)
+                .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename="+ "\"" + fileName+ "\"")
+                .body(report);
+    }
+    private void setColumnsWidth(Sheet sheet) {
+        sheet.setColumnWidth(0, 256 * 20);
+
+        for (int i = 1;i<7; i++) {
+            sheet.setColumnWidth(i, 256 * 15);
+        }
+    }
+
+    private HSSFCellStyle createStyleForTitle(HSSFWorkbook workbook) {
+        HSSFFont font = workbook.createFont();
+        font.setBold(true);
+        HSSFCellStyle style = workbook.createCellStyle();
+        style.setFont(font);
+        return style;
+    }
     private int generateScore(Demande demande) {
         int score = 0;
         score += getEnvironementScore(demande);

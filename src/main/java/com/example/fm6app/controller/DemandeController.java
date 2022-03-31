@@ -3,11 +3,14 @@ package com.example.fm6app.controller;
 import com.example.fm6app.domain.Demande;
 //import com.example.fm6app.exception.ExceptionHandling;
 import com.example.fm6app.domain.Fonction;
+import com.example.fm6app.service.dto.DemandeDTO;
 import com.example.fm6app.service.facade.DemandeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -17,7 +20,6 @@ public class DemandeController{
 
     private DemandeService demandeService;
 
-    @Autowired
     public DemandeController(DemandeService demandeService) {
         this.demandeService = demandeService;
     }
@@ -64,5 +66,16 @@ public class DemandeController{
     @PutMapping("/")
     public Demande update(@RequestBody Demande demande) {
         return demandeService.update(demande);
+    }
+
+    @PostMapping("/criteres")
+    public List<Demande> findByCriteria(@RequestBody DemandeDTO dto) {
+        return demandeService.findByCriteria(dto);
+    }
+
+    @PostMapping("/reporting/{year}")
+    public ResponseEntity<byte[]> generateXlsRepory(@PathVariable int year) throws IOException {
+        System.out.println("test");
+        return demandeService.generateXlsRepory(year);
     }
 }

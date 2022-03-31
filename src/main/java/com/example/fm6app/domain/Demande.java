@@ -10,8 +10,9 @@ public class Demande {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    @Temporal(TemporalType.DATE)
     private final Date createdAt;
+    @Column(unique = true)
     private String reference;
 
     private Environnement environment;
@@ -22,18 +23,23 @@ public class Demande {
 
     private String nom;
     private String prenom;
-
+    @Column(unique = true)
     private String cin;
+    @Column(unique = true,updatable = false)
     private String adherentCode;
+    @Temporal(TemporalType.DATE)
     private Date naissance;
+    @Column(updatable = false)
     private long age;
     private String telephone;
     private String adresseActualle;
     private String mosque;
     private String mosqueRef;
+    @Temporal(TemporalType.DATE)
     private Date dateJoindreMosque;
+    @Column(updatable = false)
     private long anciennete;
-
+    @Column(updatable = false)
     private int score;
 
     @Transient
