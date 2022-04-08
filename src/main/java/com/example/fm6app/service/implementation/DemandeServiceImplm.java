@@ -18,6 +18,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.hibernate.loader.custom.Return;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
@@ -109,6 +110,7 @@ public class DemandeServiceImplm implements DemandeService {
         }else if (!dbDemande.get().getCin().equalsIgnoreCase(demande.getCin()))
             return  null;
         else{
+            demande.setScore(generateScore(demande));
             return demandeRepo.save(demande);
         }
     }
@@ -123,7 +125,6 @@ public class DemandeServiceImplm implements DemandeService {
         query += StringUtil.addConstraint("o","anciennete","<=",dto.getAnciennete());
         query += StringUtil.addConstraint("o","fonction","=",dto.getFonction() == null?null:dto.getFonction().ordinal());
         return entityManager.createQuery(query).getResultList();
-
     }
 
     @Override
@@ -141,31 +142,43 @@ public class DemandeServiceImplm implements DemandeService {
         List<Demande> demandes = demandeRepo.findByDateCustom(year);
 
         cell = row.createCell(0, CellType.STRING);
-        cell.setCellValue("Score");
+        cell.setCellValue("الاستحقاق");
         cell.setCellStyle(style);
 
         cell = row.createCell(1, CellType.STRING);
-        cell.setCellValue("CIN");
+        cell.setCellValue("رقم البطاقة الوطنية");
         cell.setCellStyle(style);
 
         cell = row.createCell(2, CellType.STRING);
-        cell.setCellValue("Adhérent Code");
+        cell.setCellValue("رقم الانخراط");
         cell.setCellStyle(style);
 
         cell = row.createCell(3, CellType.STRING);
-        cell.setCellValue("Nom");
+        cell.setCellValue("الاسم العائلي بالعربية لصاحب الطلب");
         cell.setCellStyle(style);
 
         cell = row.createCell(4, CellType.STRING);
-        cell.setCellValue("Prénom");
+        cell.setCellValue("الاسم الشخصي بالعربية لصاحب الطلب");
         cell.setCellStyle(style);
 
         cell = row.createCell(5, CellType.STRING);
-        cell.setCellValue("Téléphone");
+        cell.setCellValue("الاسم العائلي بالفرنسية لصاحب الطلب");
         cell.setCellStyle(style);
 
         cell = row.createCell(6, CellType.STRING);
-        cell.setCellValue("Adresse actuelle");
+        cell.setCellValue("الاسم الشخصي بالفرنسية لصاحب الطلب");
+        cell.setCellStyle(style);
+
+        cell = row.createCell(7, CellType.STRING);
+        cell.setCellValue("رقم الهاتف");
+        cell.setCellStyle(style);
+
+        cell = row.createCell(8, CellType.STRING);
+        cell.setCellValue("الإقليم");
+        cell.setCellStyle(style);
+
+        cell = row.createCell(9,CellType.STRING);
+        cell.setCellValue("رقم الحساب البنكي");
         cell.setCellStyle(style);
 
         for (Demande demande : demandes){
@@ -182,16 +195,26 @@ public class DemandeServiceImplm implements DemandeService {
             cell.setCellValue(demande.getAdherentCode());
 
             cell = row.createCell(3, CellType.STRING);
-            cell.setCellValue(demande.getNom());
+            cell.setCellValue(demande.getNomArabic());
 
             cell = row.createCell(4, CellType.STRING);
-            cell.setCellValue(demande.getPrenom());
+            cell.setCellValue(demande.getPrenomArabic());
 
             cell = row.createCell(5, CellType.STRING);
-            cell.setCellValue(demande.getTelephone());
+            cell.setCellValue(demande.getNom());
 
             cell = row.createCell(6, CellType.STRING);
-            cell.setCellValue(demande.getAdresseActualle());
+            cell.setCellValue(demande.getPrenom());
+
+            cell = row.createCell(7,CellType.STRING);
+            cell.setCellValue(demande.getTelephone());
+
+            cell = row.createCell(8,CellType.STRING);
+            cell.setCellValue(demande.getProvince());
+
+            cell = row.createCell(9,CellType.STRING);
+            cell.setCellValue(demande.getRib());
+
         }
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         workbook.write(out);
@@ -219,6 +242,7 @@ public class DemandeServiceImplm implements DemandeService {
         font.setBold(true);
         HSSFCellStyle style = workbook.createCellStyle();
         style.setFont(font);
+        style.setWrapText(true);
         return style;
     }
     private int generateScore(Demande demande) {
@@ -247,6 +271,10 @@ public class DemandeServiceImplm implements DemandeService {
         demandeDao.setMosque(demande.getMosque());
         demandeDao.setMosqueRef(demande.getMosqueRef());
         demandeDao.setDateJoindreMosque(demande.getDateJoindreMosque());
+        demandeDao.setProvince(demande.getProvince());
+        demandeDao.setNomArabic(demande.getNomArabic());
+        demandeDao.setPrenomArabic(demande.getPrenomArabic());
+        demandeDao.setRib(demande.getRib());
 
         demandeDao.setEnvironment(demande.getEnvironment());
         demandeDao.setSf(demande.getSf());
@@ -266,12 +294,14 @@ public class DemandeServiceImplm implements DemandeService {
                 return critere.getFonctionKhatib();
             case GARDIEN:
                 return critere.getFonctionGardien();
+            case OBCERBATEUR:
+                return critere.getFonctionObservateur();
             case MENAGE:
                 return critere.getFonctionMenage();
             case MOADIN:
                 return critere.getFonctionMoadin();
             case PRECHEUR:
-                return critere.getFonctionObservateur();
+                return critere.getGuideEncadrentPrecheur();
             default:
                 return 0;
         }

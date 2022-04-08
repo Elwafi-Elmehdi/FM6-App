@@ -18,6 +18,6 @@ public interface DemandeRepository extends JpaRepository<Demande,Long> {
     Demande findByAgeIsLessThanEqual(Long age);
     Demande findByAncienneteIsLessThanEqual(Long anciennete);
 
-    @Query(value = "SELECT * FROM demande  WHERE created_at LIKE %?1%",nativeQuery = true)
+    @Query(value = "SELECT * FROM demande  WHERE created_at LIKE %?1% ORDER BY score DESC",nativeQuery = true)
     List<Demande> findByDateCustom(@Param("created_at") int year);
 }

@@ -73,9 +73,8 @@ public class DemandeController{
         return demandeService.findByCriteria(dto);
     }
 
-    @PostMapping("/reporting/{year}")
+    @GetMapping("/reporting/{year}")
     public ResponseEntity<byte[]> generateXlsRepory(@PathVariable int year) throws IOException {
-        System.out.println("test");
         return demandeService.generateXlsRepory(year);
     }
 }

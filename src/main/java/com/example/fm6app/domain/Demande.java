@@ -23,6 +23,11 @@ public class Demande {
 
     private String nom;
     private String prenom;
+    private String nomArabic;
+    private String prenomArabic;
+    private String province;
+    private String rib;
+
     @Column(unique = true)
     private String cin;
     @Column(unique = true,updatable = false)
@@ -59,6 +64,38 @@ public class Demande {
         this.dateJoindreMosque = dateJoindreMosque;
         long diff = (new Date().getTime() - dateJoindreMosque.getTime());
         this.anciennete = ( diff / (1000L *60*60*24*365));
+    }
+
+    public String getRib() {
+        return rib;
+    }
+
+    public void setRib(String rib) {
+        this.rib = rib;
+    }
+
+    public String getNomArabic() {
+        return nomArabic;
+    }
+
+    public void setNomArabic(String nomArabic) {
+        this.nomArabic = nomArabic;
+    }
+
+    public String getPrenomArabic() {
+        return prenomArabic;
+    }
+
+    public void setPrenomArabic(String prenomArabic) {
+        this.prenomArabic = prenomArabic;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        province = province;
     }
 
     public String getNom() {
