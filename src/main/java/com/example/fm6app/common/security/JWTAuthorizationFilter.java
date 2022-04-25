@@ -23,7 +23,10 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if(request.getMethod().equalsIgnoreCase(SecurityConsts.OPTION_HTTP_METHOD)){
             response.setStatus(SecurityConsts.OK.value());
-        }else {
+        }else if(request.getRequestURI().equals("/users/login")){
+            filterChain.doFilter(request,response);
+        }
+        else {
             String autorizationHeader =  request.getHeader(HttpHeaders.AUTHORIZATION);
             if(autorizationHeader == null || !autorizationHeader.startsWith(SecurityConsts.TOKEN_PREFIX)){
                 filterChain.doFilter(request,response);

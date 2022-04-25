@@ -18,9 +18,13 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.hibernate.loader.custom.Return;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +34,7 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,8 +57,15 @@ public class DemandeServiceImplm implements DemandeService {
 
 
     @Override
-    public List<Demande> findAll() {
-        return demandeRepo.findAll(Sort.by("score").descending());
+    public Page<Demande> findAll(Pageable pageable) {
+//        Pageable pageable = PageRequest.of(0,12,Sort.by("score").descending());
+        return demandeRepo.findAll(
+                PageRequest.of(
+                        pageable.getPageNumber(),
+                        pageable.getPageSize(),
+                        Sort.by("score").descending()
+                )
+        );
     }
 
     @Override
@@ -88,6 +100,7 @@ public class DemandeServiceImplm implements DemandeService {
         else{
             demande = generateDemande(demande);
             demande.setScore(generateScore(demande));
+            System.out.println(demande);
             return demandeRepo.save(demande);
         }
     }
@@ -116,28 +129,30 @@ public class DemandeServiceImplm implements DemandeService {
     }
 
     @Override
-    public List<Demande> findByCriteria(DemandeDTO dto) {
+    public Page<Demande> findByCriteria(DemandeDTO dto) {
         String query = "SELECT o FROM Demande o where 1=1 ";
         query += StringUtil.addConstraint( "o", "cin","=",dto.getCin());
         query += StringUtil.addConstraint( "o", "telephone","LIKE",dto.getTelephone());
-        query += StringUtil.addConstraint( "o", "adherent_code","LIKE", dto.getCodeAdherent());
+        query += StringUtil.addConstraint( "o", "codeAdherent","LIKE", dto.getCodeAdherent());
         query += StringUtil.addConstraint("o","age","<=",dto.getAge());
         query += StringUtil.addConstraint("o","anciennete","<=",dto.getAnciennete());
         query += StringUtil.addConstraint("o","fonction","=",dto.getFonction() == null?null:dto.getFonction().ordinal());
-        return entityManager.createQuery(query).getResultList();
+        query += " ORDER BY o.score DESC";
+        Page<Demande> page = new PageImpl<Demande>(entityManager.createQuery(query).getResultList());
+        return page;
     }
 
     @Override
     public ResponseEntity<byte[]> generateXlsRepory(int year) throws IOException {
 
-        HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet("CLASSIFICATION");
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("CLASSIFICATION");
         setColumnsWidth(sheet);
 
         int rownum = 0;
         Cell cell;
         Row row;
-        HSSFCellStyle style = createStyleForTitle(workbook);
+        XSSFCellStyle style = createStyleForTitle(workbook);
         row = sheet.createRow(rownum);
         List<Demande> demandes = demandeRepo.findByDateCustom(year);
 
@@ -220,7 +235,7 @@ public class DemandeServiceImplm implements DemandeService {
         workbook.write(out);
         out.close();
         workbook.close();
-        return createResponseEntity(out.toByteArray(),"report.xls");
+        return createResponseEntity(out.toByteArray(),"report-"+year+".xlsx");
     }
     private ResponseEntity<byte[]>  createResponseEntity(byte[] report, String fileName){
         return ResponseEntity.ok()
@@ -237,10 +252,10 @@ public class DemandeServiceImplm implements DemandeService {
         }
     }
 
-    private HSSFCellStyle createStyleForTitle(HSSFWorkbook workbook) {
-        HSSFFont font = workbook.createFont();
+    private XSSFCellStyle createStyleForTitle(XSSFWorkbook workbook) {
+        XSSFFont font = workbook.createFont();
         font.setBold(true);
-        HSSFCellStyle style = workbook.createCellStyle();
+        XSSFCellStyle style = workbook.createCellStyle();
         style.setFont(font);
         style.setWrapText(true);
         return style;
@@ -281,6 +296,7 @@ public class DemandeServiceImplm implements DemandeService {
         demandeDao.setFonction(demande.getFonction());
         demandeDao.setConditionPhysique(demande.getConditionPhysique());
         demandeDao.setLogement(demande.getLogement());
+        demandeDao.setEnfants(demande.getEnfants());
 
         return demandeDao;
     }

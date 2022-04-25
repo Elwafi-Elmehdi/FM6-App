@@ -2,9 +2,17 @@ package com.example.fm6app.domain;
 
 import org.springframework.stereotype.Component;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Date;
-@Component
+@Entity
 public class Enfant {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
     private Date naissance;
     private long age;
 
@@ -24,5 +32,13 @@ public class Enfant {
 
     public Enfant(){
         super();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

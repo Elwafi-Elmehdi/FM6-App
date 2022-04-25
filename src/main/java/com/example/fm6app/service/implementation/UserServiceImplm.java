@@ -60,17 +60,15 @@ public class UserServiceImplm implements UserService {
     @Override
     public User addUser(User user) throws UsernameExistsException {
         validateEmailAndUsername(StringUtils.EMPTY,user.getUsername());
-
-        String password = generatePassword();
-        user.setPassword(encodePassword(password));
         user.setUserId(genrateUserId());
+        user.setPassword(encodePassword(user.getPassword()));
         user.setJoinDate(new Date());
         user.setLastLoginDate(null);
         user.setLastLoginDateDisplay(null);
         user.setRole(getRoleEnumName(user.getRole()).name());
         user.setAuthorities(getRoleEnumName(user.getRole()).getAuthorities());
         userRepository.save(user);
-        LOGGER.info(user.getUsername()+" "+password);
+        LOGGER.info(user.getUsername()+" "+user.getPassword());
         return user;
     }
 

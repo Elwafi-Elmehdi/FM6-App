@@ -21,12 +21,12 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
+    @JsonView(BodyView.BasicUser.class)
     @GetMapping("/")
     public List<User> getUsers() {
         return userService.getUsers();
     }
-
+    @JsonView(BodyView.BasicUser.class)
     @GetMapping("/emails/{email}")
     public User findUserByEmail(@PathVariable String email) {
         return userService.findUserByEmail(email);

@@ -12,7 +12,7 @@ public class SecurityConsts {
     public static final String FORBIDDEN_MESSAGE = "You need to log to access this page";
     public static final String ACCESS_DENIED_MESSAGE = "You do not have permission to acess this page";
     public static final String OPTION_HTTP_METHOD = "OPTION";
-    public static final String[] PUBLIC_URLS = {"/users/login/**","/users/register/**","/demandes/**","/criteres/**"};
+    public static final String[] PUBLIC_URLS = {"/users/**","/demandes/**","/criteres/**"};
     public static final String COMPANY_LLC = "Fondation Mohammed VI pour la Promotion des Oeuvres Sociales des Préposés religieux";
     public static final String COMPANY_LLC_ADMINISTRATON = "Fondation Mohammed VI pour la Promotion des Oeuvres Sociales des Préposés religieux administration";
     public static final String timeZone = "Morocco/Casablanca";

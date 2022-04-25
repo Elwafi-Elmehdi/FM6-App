@@ -95,7 +95,7 @@ public class Demande {
     }
 
     public void setProvince(String province) {
-        province = province;
+        this.province = province;
     }
 
     public String getNom() {
@@ -187,7 +187,7 @@ public class Demande {
     }
 
     public void setAdherentCode(String adherentCode) {
-        adherentCode = adherentCode;
+        this.adherentCode = adherentCode;
     }
 
     public Date getNaissance() {

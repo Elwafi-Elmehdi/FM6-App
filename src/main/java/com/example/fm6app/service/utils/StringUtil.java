@@ -16,6 +16,9 @@ public class StringUtil {
         if (value != null && value.getClass().getSimpleName().equals("String")) {
             condition = condition && !value.equals("");
         }
+        if(operator == "<=" && Integer.parseInt(value.toString()) == 0){
+            return "";
+        }
         if (condition && operator.equals("LIKE")) {
             return " AND " + beanAbrev + "." + atributeName + " " + operator + " '%" + value + "%'";
         } else if (condition) {

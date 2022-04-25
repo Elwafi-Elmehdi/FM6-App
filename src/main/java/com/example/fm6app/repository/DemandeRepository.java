@@ -2,6 +2,8 @@ package com.example.fm6app.repository;
 
 import com.example.fm6app.domain.Demande;
 import com.example.fm6app.domain.Fonction;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,6 +14,9 @@ import java.util.List;
 
 @Repository
 public interface DemandeRepository extends JpaRepository<Demande,Long> {
+
+    Page<Demande> findAll(Pageable pageable);
+
     Demande findByCin(String cin);
     Demande findByAdherentCode(String code);
     Demande findByFonction(Fonction fonction);

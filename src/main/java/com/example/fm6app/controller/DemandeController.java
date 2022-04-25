@@ -6,6 +6,11 @@ import com.example.fm6app.domain.Fonction;
 import com.example.fm6app.service.dto.DemandeDTO;
 import com.example.fm6app.service.facade.DemandeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -44,8 +49,8 @@ public class DemandeController{
     }
 
     @GetMapping("/")
-    public List<Demande> findAll() {
-        return demandeService.findAll();
+    public Page<Demande> findAll(Pageable pageable) {
+        return demandeService.findAll(pageable);
     }
 
     @GetMapping("/cin/{cin}")
@@ -69,7 +74,7 @@ public class DemandeController{
     }
 
     @PostMapping("/criteres")
-    public List<Demande> findByCriteria(@RequestBody DemandeDTO dto) {
+    public Page<Demande> findByCriteria(@RequestBody DemandeDTO dto) {
         return demandeService.findByCriteria(dto);
     }
 

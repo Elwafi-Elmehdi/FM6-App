@@ -28,5 +28,4 @@ public class Fm6AppApplication implements CommandLineRunner {
 	public PasswordEncoder encoder() {
 		return new BCryptPasswordEncoder();
 	}
-
 }
