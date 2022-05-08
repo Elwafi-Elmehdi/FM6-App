@@ -1,5 +1,6 @@
 package com.example.fm6app.common.security;
 
+import com.example.fm6app.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
@@ -23,8 +24,6 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if(request.getMethod().equalsIgnoreCase(SecurityConsts.OPTION_HTTP_METHOD)){
             response.setStatus(SecurityConsts.OK.value());
-        }else if(request.getRequestURI().equals("/users/login")){
-            filterChain.doFilter(request,response);
         }
         else {
             String autorizationHeader =  request.getHeader(HttpHeaders.AUTHORIZATION);

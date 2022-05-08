@@ -4,6 +4,7 @@ import com.example.fm6app.common.BodyView;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.Date;
 
 @Entity
@@ -148,5 +149,25 @@ public class User {
 
     public void setNotLocked(boolean notLocked) {
         isNotLocked = notLocked;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", lastLoginDate=" + lastLoginDate +
+                ", lastLoginDateDisplay=" + lastLoginDateDisplay +
+                ", joinDate=" + joinDate +
+                ", role='" + role + '\'' +
+                ", authorities=" + Arrays.toString(authorities) +
+                ", isActive=" + isActive +
+                ", isNotLocked=" + isNotLocked +
+                '}';
     }
 }

@@ -5,6 +5,7 @@ import com.example.fm6app.domain.Demande;
 import com.example.fm6app.domain.Enfant;
 import com.example.fm6app.domain.Fonction;
 import com.example.fm6app.repository.DemandeRepository;
+import com.example.fm6app.repository.EnfantRepository;
 import com.example.fm6app.service.dto.DemandeDTO;
 import com.example.fm6app.service.facade.CritereService;
 import com.example.fm6app.service.facade.DemandeService;
@@ -45,13 +46,15 @@ public class DemandeServiceImplm implements DemandeService {
     private CritereService critereService;
     private Critere critere;
     private EntityManager entityManager;
+    private EnfantRepository enfantRepository;
 
     @Autowired
-    public DemandeServiceImplm(DemandeRepository demandeRepo, CritereService critereService, EntityManager entityManager) {
+    public DemandeServiceImplm(DemandeRepository demandeRepo, CritereService critereService, EntityManager entityManager,EnfantRepository enfantRepository) {
         this.demandeRepo = demandeRepo;
         this.critereService = critereService;
         this.critere = critereService.findOne();
         this.entityManager = entityManager;
+        this.enfantRepository = enfantRepository;
     }
 
 
@@ -124,6 +127,7 @@ public class DemandeServiceImplm implements DemandeService {
             return  null;
         else{
             demande.setScore(generateScore(demande));
+            demande.setEnfants(enfantRepository.saveAll(demande.getEnfants()));
             return demandeRepo.save(demande);
         }
     }

@@ -20,10 +20,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/demandes")
-
 public class DemandeController{
 
-    private DemandeService demandeService;
+    private final DemandeService demandeService;
 
     public DemandeController(DemandeService demandeService) {
         this.demandeService = demandeService;

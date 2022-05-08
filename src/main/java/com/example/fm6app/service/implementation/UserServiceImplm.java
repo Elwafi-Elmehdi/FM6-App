@@ -13,21 +13,19 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserServiceImplm implements UserService {
@@ -73,12 +71,12 @@ public class UserServiceImplm implements UserService {
     }
 
     @Override
-    public ResponseEntity<User> login(String username, String password) {
+    public ResponseEntity<Map> login(String username, String password) {
         authenticate(username,password);
         User loginUser = findUserByUsername(username);
         UserPrinciple userPrinciple = new UserPrinciple(loginUser);
         HttpHeaders tokenHeader = getJwtToken(userPrinciple);
-        return new ResponseEntity<>(loginUser,tokenHeader, HttpStatus.OK);
+        return new ResponseEntity<>(Map.of("user",loginUser,"token",tokenHeader.get("Jwt-Token")),tokenHeader, HttpStatus.OK);
     }
 
 

@@ -4,7 +4,7 @@ import com.example.fm6app.domain.Fonction;
 
 public class DemandeDTO {
     private String cin;
-    private String codeAdherent;
+    private String adherentCode;
     private String telephone;
     private int age;
     private int anciennete;
@@ -18,12 +18,12 @@ public class DemandeDTO {
         this.cin = cin;
     }
 
-    public String getCodeAdherent() {
-        return codeAdherent;
+    public String getAdherentCode() {
+        return adherentCode;
     }
 
-    public void setCodeAdherent(String codeAdherent) {
-        this.codeAdherent = codeAdherent;
+    public void setAdherentCode(String adherentCode) {
+        this.adherentCode = adherentCode;
     }
 
     public String getTelephone() {

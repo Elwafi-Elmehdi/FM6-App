@@ -2,9 +2,11 @@ package com.example.fm6app.controller;
 
 import com.example.fm6app.domain.Critere;
 //import com.example.fm6app.exception.ExceptionHandling;
+import com.example.fm6app.domain.User;
 import com.example.fm6app.service.facade.CritereService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,7 +15,7 @@ import java.util.List;
 @RequestMapping("/criteres")
 public class CritereController{
 
-    private CritereService critereService;
+    private final CritereService critereService;
 
     @Autowired
     public CritereController(CritereService critereService) {

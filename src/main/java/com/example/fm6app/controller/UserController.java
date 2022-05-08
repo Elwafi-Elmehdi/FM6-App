@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,25 +27,26 @@ public class UserController {
     public List<User> getUsers() {
         return userService.getUsers();
     }
-    @JsonView(BodyView.BasicUser.class)
-    @GetMapping("/emails/{email}")
-    public User findUserByEmail(@PathVariable String email) {
-        return userService.findUserByEmail(email);
-    }
 
-    @GetMapping("/usernames/{username}")
-    public User findUserByUsername(@PathVariable String username) {
-        return userService.findUserByUsername(username);
-    }
+//    @JsonView(BodyView.BasicUser.class)
+//    @GetMapping("/emails/{email}")
+//    public User findUserByEmail(@PathVariable String email) {
+//        return userService.findUserByEmail(email);
+//    }
+
+//    @GetMapping("/usernames/{username}")
+//    public User findUserByUsername(@PathVariable String username) {
+//        return userService.findUserByUsername(username);
+//    }
 
     @JsonView(BodyView.BasicUser.class)
     @PostMapping("/register")
     public User addUser(@RequestBody User user) throws UsernameExistsException {
         return userService.addUser(user);
     }
-    @JsonView(BodyView.BasicUser.class)
-    @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody User user) {
-        return userService.login(user.getUsername(), user.getPassword());
-    }
+//    @JsonView(BodyView.BasicUser.class)
+//    @PostMapping("/login")
+//    public ResponseEntity<User> login(@RequestBody User user) {
+//        return userService.login(user.getUsername(), user.getPassword());
+//    }
 }
