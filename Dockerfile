@@ -1,13 +1,23 @@
-FROM adoptopenjdk/openjdk11:x86_64-alpine-jdk-11.0.14.1_1-slim
+FROM maven:3.6.1-jdk-8-slim AS build
 
-ARG JAR_FILE=target/*.jar
+RUN mkdir -p /workspace
 
-COPY ${JAR_FILE} app.jar
+WORKDIR /workspace
+
+COPY pom.xml /workspace
+
+COPY src /workspace/src
+
+RUN mvn -f pom.xml clean package -Dmaven.test.skip
+
+FROM openjdk:8-alpine
+
+COPY --from=build /workspace/target/*.jar app.jar
 
 RUN addgroup -S springboot && adduser -S sbuser -G springboot
 
 USER sbuser
 
-EXPOSE 8080
+EXPOSE 8036
 
 ENTRYPOINT ["java","-jar","/app.jar"]
