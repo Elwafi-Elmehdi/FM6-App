@@ -10,6 +10,8 @@ public class Demande {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private int status;
+
     @Temporal(TemporalType.DATE)
     private final Date createdAt;
     @Column(unique = true)
@@ -53,6 +55,7 @@ public class Demande {
     public Demande() {
         super();
         this.score = 0;
+        this.status = 0;
         this.createdAt = new Date();
     }
 
@@ -255,5 +258,13 @@ public class Demande {
 
     public void setEnfants(List<Enfant> enfants) {
         this.enfants = enfants;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

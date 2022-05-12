@@ -137,7 +137,7 @@ public class DemandeServiceImplm implements DemandeService {
         String query = "SELECT o FROM Demande o where 1=1 ";
         query += StringUtil.addConstraint( "o", "cin","=",dto.getCin());
         query += StringUtil.addConstraint( "o", "telephone","LIKE",dto.getTelephone());
-        query += StringUtil.addConstraint( "o", "codeAdherent","LIKE", dto.getCodeAdherent());
+        query += StringUtil.addConstraint( "o", "codeAdherent","LIKE", dto.getAdherentCode());
         query += StringUtil.addConstraint("o","age","<=",dto.getAge());
         query += StringUtil.addConstraint("o","anciennete","<=",dto.getAnciennete());
         query += StringUtil.addConstraint("o","fonction","=",dto.getFonction() == null?null:dto.getFonction().ordinal());
