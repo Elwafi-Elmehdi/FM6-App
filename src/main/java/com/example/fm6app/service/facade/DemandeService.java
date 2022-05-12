@@ -22,4 +22,5 @@ public interface DemandeService {
     Demande update(Demande demande);
     Page<Demande> findByCriteria(DemandeDTO dto);
     ResponseEntity<byte[]> generateXlsRepory(int year) throws IOException;
+    Demande processDemande(Long id);
 }

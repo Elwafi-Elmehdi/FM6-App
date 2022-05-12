@@ -241,6 +241,12 @@ public class DemandeServiceImplm implements DemandeService {
         workbook.close();
         return createResponseEntity(out.toByteArray(),"report-"+year+".xlsx");
     }
+
+    @Override
+    public Demande processDemande(Long id) {
+        return null;
+    }
+
     private ResponseEntity<byte[]>  createResponseEntity(byte[] report, String fileName){
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8"))

@@ -10,7 +10,7 @@ public class Demande {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private int status;
+    private DemandeState status;
 
     @Temporal(TemporalType.DATE)
     private final Date createdAt;
@@ -52,10 +52,12 @@ public class Demande {
     @Transient
     private List<Enfant> enfants = new ArrayList<>();
 
+    private String commentaire;
+
     public Demande() {
         super();
         this.score = 0;
-        this.status = 0;
+        this.status = DemandeState.EN_ATTENTE;
         this.createdAt = new Date();
     }
 
@@ -260,11 +262,19 @@ public class Demande {
         this.enfants = enfants;
     }
 
-    public int getStatus() {
+    public DemandeState getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(DemandeState status) {
         this.status = status;
+    }
+
+    public String getCommentaire() {
+        return commentaire;
+    }
+
+    public void setCommentaire(String commentaire) {
+        this.commentaire = commentaire;
     }
 }
