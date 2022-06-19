@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/demandes")
-public class DemandeController{
+public class DemandeController {
 
     private final DemandeService demandeService;
 
@@ -34,6 +35,7 @@ public class DemandeController{
     public Demande findByCodeAdherentCode(@PathVariable String code) {
         return demandeService.findByCodeAdherentCode(code);
     }
+
     @GetMapping("/fonctions/{fonction}")
     public Demande findByFonction(@PathVariable Fonction fonction) {
         return demandeService.findByFonction(fonction);
@@ -83,8 +85,9 @@ public class DemandeController{
     public ResponseEntity<byte[]> generateXlsRepory(@PathVariable int year) throws IOException {
         return demandeService.generateXlsRepory(year);
     }
+
     @PostMapping("/process")
-    public Demande processDemande(@RequestBody  ProcessDemandeDTO dto) throws ParseException {
+    public Demande processDemande(@RequestBody ProcessDemandeDTO dto) throws ParseException {
         return demandeService.processDemande(dto);
     }
 }

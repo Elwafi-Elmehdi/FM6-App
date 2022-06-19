@@ -24,10 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @ComponentScan
-@EnableGlobalMethodSecurity(
-        prePostEnabled = true,
-        securedEnabled = true,
-        jsr250Enabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JWTAuthorizationFilter jwtAuthorizationFilter;
@@ -40,7 +37,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -51,11 +47,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/criteres/**","/users/**").hasRole("ADMIN")
-                .antMatchers("/demandes/**").hasAnyRole("USER","ADMIN")
-                .antMatchers("/","/**").permitAll()
-//                .antMatchers(SecurityConsts.PUBLIC_URLS).permitAll()
-//                .anyRequest().authenticated()
+                .antMatchers("/", "/**").permitAll()
+                .antMatchers("/demandes/**").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/criteres/**", "/users/**").hasRole("ADMIN")
+                // .antMatchers(SecurityConsts.PUBLIC_URLS).permitAll()
+                // .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().accessDeniedHandler(jwtAccessDenielHandler)
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
@@ -70,9 +66,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean(name = "authenticationManager")
     @Override
-    public  AuthenticationManager authenticationManagerBean() throws Exception{
+    public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
 
 }
