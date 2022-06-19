@@ -2,10 +2,7 @@ package com.example.fm6app.domain;
 
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 @Entity
 public class Enfant {
@@ -15,6 +12,8 @@ public class Enfant {
 
     private Date naissance;
     private long age;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Demande demande;
 
     public Date getNaissance() {
         return naissance;
@@ -40,5 +39,13 @@ public class Enfant {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Demande getDemande() {
+        return demande;
+    }
+
+    public void setDemande(Demande demande) {
+        this.demande = demande;
     }
 }

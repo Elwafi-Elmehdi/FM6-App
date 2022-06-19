@@ -4,6 +4,7 @@ import com.example.fm6app.domain.Demande;
 //import com.example.fm6app.exception.ExceptionHandling;
 import com.example.fm6app.domain.Fonction;
 import com.example.fm6app.service.dto.DemandeDTO;
+import com.example.fm6app.service.dto.ProcessDemandeDTO;
 import com.example.fm6app.service.facade.DemandeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -80,5 +82,9 @@ public class DemandeController{
     @GetMapping("/reporting/{year}")
     public ResponseEntity<byte[]> generateXlsRepory(@PathVariable int year) throws IOException {
         return demandeService.generateXlsRepory(year);
+    }
+    @PostMapping("/process")
+    public Demande processDemande(@RequestBody  ProcessDemandeDTO dto) throws ParseException {
+        return demandeService.processDemande(dto);
     }
 }

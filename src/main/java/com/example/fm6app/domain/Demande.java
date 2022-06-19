@@ -12,6 +12,8 @@ public class Demande {
     private Long id;
     private DemandeState status;
 
+    private Date processedAt;
+
     @Temporal(TemporalType.DATE)
     private final Date createdAt;
     @Column(unique = true)
@@ -48,9 +50,8 @@ public class Demande {
     private long anciennete;
     @Column(updatable = false)
     private int score;
-
-    @Transient
-    private List<Enfant> enfants = new ArrayList<>();
+    @OneToMany( mappedBy = "demande",cascade = CascadeType.ALL)
+    private List<Enfant> enfants;
 
     private String commentaire;
 
@@ -276,5 +277,13 @@ public class Demande {
 
     public void setCommentaire(String commentaire) {
         this.commentaire = commentaire;
+    }
+
+    public Date getProcessedAt() {
+        return processedAt;
+    }
+
+    public void setProcessedAt(Date processedAt) {
+        this.processedAt = processedAt;
     }
 }

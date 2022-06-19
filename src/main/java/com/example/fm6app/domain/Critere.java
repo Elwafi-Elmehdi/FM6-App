@@ -10,15 +10,14 @@ import javax.persistence.Id;
 import javax.validation.constraints.Min;
 import java.util.Date;
 
-
 @Entity
 public class Critere {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @JsonFormat(pattern = "dd-MM-yyyy@HH:mm:ss",locale = "fr_MA")
+    @JsonFormat(pattern = "dd-MM-yyyy@HH:mm:ss", locale = "fr_MA")
     private Date createdAt;
-    @JsonFormat(pattern = "dd-MM-yyyy@HH:mm:ss",locale = "fr_MA")
+    @JsonFormat(pattern = "dd-MM-yyyy@HH:mm:ss", locale = "fr_MA")
     private Date updatedAt;
 
     @NotNull
@@ -47,7 +46,7 @@ public class Critere {
     @Min(value = 0)
     private int etatPhysique;
 
-    //Situation Familiale
+    // Situation Familiale
     @NotNull
     @Min(value = 0)
     private int sfCelibataire;
@@ -64,7 +63,11 @@ public class Critere {
     @Min(value = 0)
     private int sfDivorce;
 
-    //Logement
+    @NotNull
+    @Min(value = 0)
+    private int sfMort;
+
+    // Logement
     @NotNull
     @Min(value = 0)
     private int logementLouer;
@@ -77,7 +80,7 @@ public class Critere {
     @Min(value = 0)
     private int logementFamille;
 
-    //Fonction
+    // Fonction
     @NotNull
     @Min(value = 0)
     private int fonctionImame;
@@ -121,6 +124,7 @@ public class Critere {
         this.sfVeuf = 30;
         this.sfMarie = 40;
         this.sfDivorce = 20;
+        this.sfMort = 0;
 
         this.logementLouer = 60;
         this.logementAnnexeMosque = 40;
@@ -319,10 +323,20 @@ public class Critere {
         this.guideEncadrentPrecheur = guideEncadrentPrecheur;
     }
 
+    public int getSfMort() {
+        return sfMort;
+    }
+
+    public void setSfMort(int sfMort) {
+        this.sfMort = sfMort;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Critere critere = (Critere) o;
         return id.equals(critere.id);
     }

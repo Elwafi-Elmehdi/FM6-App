@@ -20,29 +20,31 @@ import java.util.List;
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
     @Autowired
     private JWTTokenProvider jwtTokenProvider;
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if(request.getMethod().equalsIgnoreCase(SecurityConsts.OPTION_HTTP_METHOD)){
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        if (request.getMethod().equalsIgnoreCase(SecurityConsts.OPTION_HTTP_METHOD)) {
             response.setStatus(SecurityConsts.OK.value());
-        }
-        else {
-            String autorizationHeader =  request.getHeader(HttpHeaders.AUTHORIZATION);
-            if(autorizationHeader == null || !autorizationHeader.startsWith(SecurityConsts.TOKEN_PREFIX)){
-                filterChain.doFilter(request,response);
+        } else {
+            String autorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+            if (autorizationHeader == null || !autorizationHeader.startsWith(SecurityConsts.TOKEN_PREFIX)) {
+                filterChain.doFilter(request, response);
                 return;
             }
             String token = autorizationHeader.substring(SecurityConsts.TOKEN_PREFIX.length());
             String username = jwtTokenProvider.getSubject(token);
-            if(jwtTokenProvider.isTokenValid(username,token) && SecurityContextHolder.getContext().getAuthentication() == null){
+            if (jwtTokenProvider.isTokenValid(username, token)
+                    && SecurityContextHolder.getContext().getAuthentication() == null) {
 
                 List<GrantedAuthority> authorities = jwtTokenProvider.getAuthorities(token);
-                Authentication authentication = jwtTokenProvider.getAuthentication(username,authorities,request);
+                Authentication authentication = jwtTokenProvider.getAuthentication(username, authorities, request);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            }else {
+            } else {
                 SecurityContextHolder.clearContext();
             }
 
         }
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
 }

@@ -1,12 +1,10 @@
 package com.example.fm6app.service.implementation;
 
-import com.example.fm6app.domain.Critere;
-import com.example.fm6app.domain.Demande;
-import com.example.fm6app.domain.Enfant;
-import com.example.fm6app.domain.Fonction;
+import com.example.fm6app.domain.*;
 import com.example.fm6app.repository.DemandeRepository;
 import com.example.fm6app.repository.EnfantRepository;
 import com.example.fm6app.service.dto.DemandeDTO;
+import com.example.fm6app.service.dto.ProcessDemandeDTO;
 import com.example.fm6app.service.facade.CritereService;
 import com.example.fm6app.service.facade.DemandeService;
 import com.example.fm6app.service.utils.StringUtil;
@@ -35,6 +33,9 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -103,7 +104,7 @@ public class DemandeServiceImplm implements DemandeService {
         else{
             demande = generateDemande(demande);
             demande.setScore(generateScore(demande));
-            System.out.println(demande);
+            enfantRepository.saveAll(demande.getEnfants());
             return demandeRepo.save(demande);
         }
     }
@@ -165,38 +166,42 @@ public class DemandeServiceImplm implements DemandeService {
         cell.setCellStyle(style);
 
         cell = row.createCell(1, CellType.STRING);
-        cell.setCellValue("رقم البطاقة الوطنية");
+        cell.setCellValue("الوضعية");
         cell.setCellStyle(style);
 
         cell = row.createCell(2, CellType.STRING);
-        cell.setCellValue("رقم الانخراط");
+        cell.setCellValue("رقم البطاقة الوطنية");
         cell.setCellStyle(style);
 
         cell = row.createCell(3, CellType.STRING);
-        cell.setCellValue("الاسم العائلي بالعربية لصاحب الطلب");
+        cell.setCellValue("رقم الانخراط");
         cell.setCellStyle(style);
 
         cell = row.createCell(4, CellType.STRING);
-        cell.setCellValue("الاسم الشخصي بالعربية لصاحب الطلب");
+        cell.setCellValue("الاسم العائلي بالعربية لصاحب الطلب");
         cell.setCellStyle(style);
 
         cell = row.createCell(5, CellType.STRING);
-        cell.setCellValue("الاسم العائلي بالفرنسية لصاحب الطلب");
+        cell.setCellValue("الاسم الشخصي بالعربية لصاحب الطلب");
         cell.setCellStyle(style);
 
         cell = row.createCell(6, CellType.STRING);
-        cell.setCellValue("الاسم الشخصي بالفرنسية لصاحب الطلب");
+        cell.setCellValue("الاسم العائلي بالفرنسية لصاحب الطلب");
         cell.setCellStyle(style);
 
         cell = row.createCell(7, CellType.STRING);
-        cell.setCellValue("رقم الهاتف");
+        cell.setCellValue("الاسم الشخصي بالفرنسية لصاحب الطلب");
         cell.setCellStyle(style);
 
         cell = row.createCell(8, CellType.STRING);
+        cell.setCellValue("رقم الهاتف");
+        cell.setCellStyle(style);
+
+        cell = row.createCell(9, CellType.STRING);
         cell.setCellValue("الإقليم");
         cell.setCellStyle(style);
 
-        cell = row.createCell(9,CellType.STRING);
+        cell = row.createCell(10,CellType.STRING);
         cell.setCellValue("رقم الحساب البنكي");
         cell.setCellStyle(style);
 
@@ -208,30 +213,33 @@ public class DemandeServiceImplm implements DemandeService {
             cell.setCellValue(demande.getScore());
 
             cell = row.createCell(1, CellType.STRING);
-            cell.setCellValue(demande.getCin());
+            cell.setCellValue(getArabicState(demande.getStatus()));
 
             cell = row.createCell(2, CellType.STRING);
-            cell.setCellValue(demande.getAdherentCode());
+            cell.setCellValue(demande.getCin());
 
             cell = row.createCell(3, CellType.STRING);
-            cell.setCellValue(demande.getNomArabic());
+            cell.setCellValue(demande.getAdherentCode());
 
             cell = row.createCell(4, CellType.STRING);
-            cell.setCellValue(demande.getPrenomArabic());
+            cell.setCellValue(demande.getNomArabic());
 
             cell = row.createCell(5, CellType.STRING);
-            cell.setCellValue(demande.getNom());
+            cell.setCellValue(demande.getPrenomArabic());
 
             cell = row.createCell(6, CellType.STRING);
+            cell.setCellValue(demande.getNom());
+
+            cell = row.createCell(7, CellType.STRING);
             cell.setCellValue(demande.getPrenom());
 
-            cell = row.createCell(7,CellType.STRING);
+            cell = row.createCell(8,CellType.STRING);
             cell.setCellValue(demande.getTelephone());
 
-            cell = row.createCell(8,CellType.STRING);
+            cell = row.createCell(9,CellType.STRING);
             cell.setCellValue(demande.getProvince());
 
-            cell = row.createCell(9,CellType.STRING);
+            cell = row.createCell(10,CellType.STRING);
             cell.setCellValue(demande.getRib());
 
         }
@@ -243,9 +251,32 @@ public class DemandeServiceImplm implements DemandeService {
     }
 
     @Override
-    public Demande processDemande(Long id) {
+    public Demande processDemande(ProcessDemandeDTO dto) throws ParseException {
+        if (demandeRepo.existsById(dto.getId())){
+            Demande demanda = demandeRepo.findById(dto.getId()).get();
+            demanda.setStatus(dto.getState());
+            demanda.setProcessedAt(new SimpleDateFormat("MM/dd/yyyy").parse(dto.getProcessedAt()));
+            demanda.setCommentaire(dto.getCommentaire());
+            demandeRepo.save(demanda);
+            return demanda;
+        }else {
         return null;
+        }
     }
+
+    private String getArabicState(DemandeState state){
+        switch (state) {
+            case REFUSEE:
+                return "مرفوض";
+            case SAUVEGARDEE:
+                return "محفوظ";
+            case VALIDEE:
+                return "مقبول";
+            default:
+                return "في طور المعالجة";
+        }
+    }
+
 
     private ResponseEntity<byte[]>  createResponseEntity(byte[] report, String fileName){
         return ResponseEntity.ok()
